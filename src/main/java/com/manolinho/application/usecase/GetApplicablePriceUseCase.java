@@ -17,6 +17,15 @@ public class GetApplicablePriceUseCase {
     }
 
     public Optional<Tienda> execute(LocalDateTime applicationDate, Long productId, Long brandId) {
+        if (applicationDate == null) {
+            throw new IllegalArgumentException("fechaAplicacion obligatoria");
+        }
+        if (productId == null || productId <= 0) {
+            throw new IllegalArgumentException("PRODUCT_ID debe ser mayor que 0");
+        }
+        if (brandId == null || brandId <= 0) {
+            throw new IllegalArgumentException("BRAND_ID debe ser mayor que 0");
+        }
         return tiendaRepository.findApplicablePrice(applicationDate, productId, brandId);
     }
 }

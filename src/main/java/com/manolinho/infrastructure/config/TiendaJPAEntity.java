@@ -23,7 +23,7 @@ public class TiendaJPAEntity {
     private Long id;
 
 
-    @Column(name = "BRAND_ID")
+    @Column(name = "BRAND_ID", nullable = false)
     private Long brandId;
 
     @ManyToOne
@@ -31,16 +31,16 @@ public class TiendaJPAEntity {
             foreignKey = @ForeignKey(name = "FK_TIENDA_BRAND"))
     private BrandJPAEntity brand;
 
-    @Column(name = "START_DATE")
+    @Column(name = "START_DATE", nullable = false)
     private LocalDateTime startDate;
 
-    @Column(name = "END_DATE")
+    @Column(name = "END_DATE", nullable = false)
     private LocalDateTime endDate;
 
-    @Column(name = "PRICE_LIST")
+    @Column(name = "PRICE_LIST", nullable = false)
     private Integer priceList;
 
-    @Column(name = "PRODUCT_ID")
+    @Column(name = "PRODUCT_ID", nullable = false)
     private Long productId;
 
     @ManyToOne
@@ -48,13 +48,13 @@ public class TiendaJPAEntity {
             foreignKey = @ForeignKey(name = "FK_TIENDA_PRODUCT"))
     private ProductJPAEntity product;
 
-    @Column(name = "PRIORITY")
+    @Column(name = "PRIORITY", nullable = false)
     private Integer priority;
 
-    @Column(name = "PRICE", precision = 10, scale = 2)
+    @Column(name = "PRICE", precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
 
-    @Column(name = "CURR", length = 3)
+    @Column(name = "CURR", length = 3, nullable = false)
     private String curr;
 
 

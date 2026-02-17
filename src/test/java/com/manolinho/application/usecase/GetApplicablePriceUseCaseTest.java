@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -43,5 +45,32 @@ class GetApplicablePriceUseCaseTest {
         Optional<Tienda> result = getApplicablePriceUseCase.execute(fechaAplicacion, 35455L, 1L);
 
         assertTrue(result.isPresent());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoFechaAplicacionEsNull() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> getApplicablePriceUseCase.execute(null, 35455L, 1L)
+        );
+        assertEquals("fechaAplicacion obligatoria", ex.getMessage());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoProductIdNoEsValido() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> getApplicablePriceUseCase.execute(LocalDateTime.parse("2026-01-15T10:00:00"), 0L, 1L)
+        );
+        assertEquals("PRODUCT_ID debe ser mayor que 0", ex.getMessage());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoBrandIdNoEsValido() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> getApplicablePriceUseCase.execute(LocalDateTime.parse("2026-01-15T10:00:00"), 35455L, -1L)
+        );
+        assertEquals("BRAND_ID debe ser mayor que 0", ex.getMessage());
     }
 }

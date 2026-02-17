@@ -3,6 +3,7 @@ package com.manolinho.infrastructure.repository;
 import com.manolinho.domain.model.Tienda;
 import com.manolinho.domain.repository.TiendaRepository;
 import com.manolinho.infrastructure.config.TiendaJPAEntity;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -46,12 +47,14 @@ public class TiendaRepositoryAdapter implements TiendaRepository {
     @Override
     public Optional<Tienda> findApplicablePrice(LocalDateTime applicationDate, Long productId, Long brandId) {
         return jpaRepository
-                .findFirstByBrandIdAndProductIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+                .findApplicablePrices(
                         brandId,
                         productId,
                         applicationDate,
-                        applicationDate
+                        PageRequest.of(0, 1)
                 )
+                .stream()
+                .findFirst()
                 .map(saved -> new Tienda(
                         saved.getId(),
                         saved.getBrandId(),
