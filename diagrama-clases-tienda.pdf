@@ -1,0 +1,187 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 2399 >>
+stream
+BT
+/F1 14 Tf
+1 0 0 1 180 770 Tm
+(Diagrama de clases - Modulo Tienda) Tj
+ET
+30 620 220 110 re S
+280 620 220 110 re S
+280 460 220 90 re S
+30 460 220 110 re S
+30 300 220 90 re S
+280 300 220 120 re S
+280 130 220 130 re S
+BT
+/F1 11 Tf
+1 0 0 1 40 710 Tm
+(TiendaController) Tj
+ET
+30 702 m 250 702 l S
+BT
+/F1 10 Tf
+1 0 0 1 40 685 Tm
+(- createTiendaUseCase: CreateTiendaUseCase) Tj
+ET
+30 675 m 250 675 l S
+BT
+/F1 10 Tf
+1 0 0 1 40 658 Tm
+(+ create\\(request\\): Tienda) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 290 710 Tm
+(CreateTiendaUseCase) Tj
+ET
+280 702 m 500 702 l S
+BT
+/F1 10 Tf
+1 0 0 1 290 685 Tm
+(- tiendaRepository: TiendaRepository) Tj
+ET
+280 675 m 500 675 l S
+BT
+/F1 10 Tf
+1 0 0 1 290 658 Tm
+(+ execute\\(nombre, direccion\\): Tienda) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 290 530 Tm
+(<<interface>> TiendaRepository) Tj
+ET
+280 522 m 500 522 l S
+BT
+/F1 10 Tf
+1 0 0 1 290 502 Tm
+(+ save\\(tienda\\): Tienda) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 40 550 Tm
+(TiendaRepositoryAdapter) Tj
+ET
+30 542 m 250 542 l S
+BT
+/F1 10 Tf
+1 0 0 1 40 525 Tm
+(- jpaRepository: SpringDataTiendaRepository) Tj
+ET
+30 515 m 250 515 l S
+BT
+/F1 10 Tf
+1 0 0 1 40 498 Tm
+(+ save\\(tienda\\): Tienda) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 40 370 Tm
+(SpringDataTiendaRepository) Tj
+ET
+30 362 m 250 362 l S
+BT
+/F1 10 Tf
+1 0 0 1 40 342 Tm
+(extends JpaRepository<TiendaJPAEntity, Long>) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 290 400 Tm
+(TiendaJPAEntity) Tj
+ET
+280 392 m 500 392 l S
+BT
+/F1 10 Tf
+1 0 0 1 290 375 Tm
+(- id: Long) Tj
+ET
+BT
+/F1 10 Tf
+1 0 0 1 290 360 Tm
+(- nombre: String) Tj
+ET
+BT
+/F1 10 Tf
+1 0 0 1 290 345 Tm
+(- direccion: String) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 290 240 Tm
+(Tienda) Tj
+ET
+280 232 m 500 232 l S
+BT
+/F1 10 Tf
+1 0 0 1 290 215 Tm
+(- id: Long) Tj
+ET
+BT
+/F1 10 Tf
+1 0 0 1 290 200 Tm
+(- nombre: String) Tj
+ET
+BT
+/F1 10 Tf
+1 0 0 1 290 185 Tm
+(- direccion: String) Tj
+ET
+280 175 m 500 175 l S
+BT
+/F1 10 Tf
+1 0 0 1 290 158 Tm
+(+ Tienda\\(id, nombre, direccion\\)) Tj
+ET
+250 675 m 280 675 l S
+274 679 m 280 675 l S
+274 671 m 280 675 l S
+390 620 m 390 550 l S
+386 556 m 390 550 l S
+394 556 m 390 550 l S
+250 550 m 280 550 l S
+250 558 m 280 558 l S
+250 566 m 280 566 l S
+274 574 m 280 570 l S
+274 566 m 280 570 l S
+140 460 m 140 390 l S
+136 396 m 140 390 l S
+144 396 m 140 390 l S
+250 345 m 280 345 l S
+274 349 m 280 345 l S
+274 341 m 280 345 l S
+250 505 m 390 260 l S
+383 263 m 390 260 l S
+387 254 m 390 260 l S
+500 620 m 500 260 l S
+496 266 m 500 260 l S
+504 266 m 500 260 l S
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2762
+%%EOF

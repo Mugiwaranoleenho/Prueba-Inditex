@@ -1,0 +1,112 @@
+package com.manolinho.application.usecase;
+
+import com.manolinho.domain.model.Tienda;
+import com.manolinho.domain.repository.TiendaRepository;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class CreateTiendaUseCaseTest {
+
+    @Mock
+    private TiendaRepository tiendaRepository;
+
+    @InjectMocks
+    private CreateTiendaUseCase createTiendaUseCase;
+
+    @Test
+    void deberiaGuardarYRetornarTiendaCreada() {
+        when(tiendaRepository.save(any(Tienda.class)))
+                .thenReturn(new Tienda(
+                        10L,
+                        "Tienda Norte",
+                        "Av. Principal 45",
+                        1L,
+                        LocalDateTime.parse("2026-01-01T00:00:00"),
+                        LocalDateTime.parse("2026-12-31T23:59:59"),
+                        2,
+                        12345L,
+                        1,
+                        new BigDecimal("25.45"),
+                        "EUR"
+                ));
+
+        Tienda result = createTiendaUseCase.execute(
+                "Tienda Norte",
+                "Av. Principal 45",
+                1L,
+                LocalDateTime.parse("2026-01-01T00:00:00"),
+                LocalDateTime.parse("2026-12-31T23:59:59"),
+                2,
+                12345L,
+                1,
+                new BigDecimal("25.45"),
+                "EUR"
+        );
+
+        ArgumentCaptor<Tienda> captor = ArgumentCaptor.forClass(Tienda.class);
+        verify(tiendaRepository).save(captor.capture());
+        Tienda enviada = captor.getValue();
+
+        assertEquals("Tienda Norte", enviada.getNombre());
+        assertEquals("Av. Principal 45", enviada.getDireccion());
+        assertEquals(2, enviada.getPriceList());
+        assertEquals(12345L, enviada.getProductId());
+        assertEquals(new BigDecimal("25.45"), enviada.getPrice());
+        assertEquals(10L, result.getId());
+        assertEquals("Tienda Norte", result.getNombre());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoNombreEsVacio() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> createTiendaUseCase.execute(
+                        " ",
+                        "Av. Principal 45",
+                        1L,
+                        LocalDateTime.parse("2026-01-01T00:00:00"),
+                        LocalDateTime.parse("2026-12-31T23:59:59"),
+                        2,
+                        12345L,
+                        1,
+                        new BigDecimal("25.45"),
+                        "EUR"
+                )
+        );
+        assertEquals("Nombre obligatorio", ex.getMessage());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoEndDateEsAnterior() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> createTiendaUseCase.execute(
+                        "Tienda Norte",
+                        "Av. Principal 45",
+                        1L,
+                        LocalDateTime.parse("2026-12-31T23:59:59"),
+                        LocalDateTime.parse("2026-01-01T00:00:00"),
+                        2,
+                        12345L,
+                        1,
+                        new BigDecimal("25.45"),
+                        "EUR"
+                )
+        );
+        assertEquals("END_DATE no puede ser anterior a START_DATE", ex.getMessage());
+    }
+}
