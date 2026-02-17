@@ -99,4 +99,59 @@ class CreateTiendaUseCaseTest {
         );
         assertEquals("END_DATE no puede ser anterior a START_DATE", ex.getMessage());
     }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoPriceNoEsPositivo() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> createTiendaUseCase.execute(
+                        1L,
+                        LocalDateTime.parse("2026-01-01T00:00:00"),
+                        LocalDateTime.parse("2026-12-31T23:59:59"),
+                        2,
+                        12345L,
+                        1,
+                        BigDecimal.ZERO,
+                        "EUR"
+                )
+        );
+        assertEquals("PRICE debe ser mayor que 0", ex.getMessage());
+    }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoCurrNoEsIso4217() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> createTiendaUseCase.execute(
+                        1L,
+                        LocalDateTime.parse("2026-01-01T00:00:00"),
+                        LocalDateTime.parse("2026-12-31T23:59:59"),
+                        2,
+                        12345L,
+                        1,
+                        new BigDecimal("10.00"),
+                        "EURO"
+                )
+        );
+        assertEquals("CURR debe ser un codigo ISO 4217 valido", ex.getMessage());
+    }
+
+    @Test
+    void deberiaNormalizarCurrAMayusculas() {
+        when(tiendaRepository.save(any(Tienda.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0, Tienda.class));
+
+        Tienda result = createTiendaUseCase.execute(
+                1L,
+                LocalDateTime.parse("2026-01-01T00:00:00"),
+                LocalDateTime.parse("2026-12-31T23:59:59"),
+                2,
+                12345L,
+                1,
+                new BigDecimal("25.45"),
+                "eur"
+        );
+
+        assertEquals("EUR", result.getCurr());
+    }
 }
