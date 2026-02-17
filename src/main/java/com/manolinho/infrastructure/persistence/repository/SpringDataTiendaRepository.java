@@ -1,13 +1,12 @@
-package com.manolinho.infrastructure.repository;
+package com.manolinho.infrastructure.persistence.repository;
 
-import com.manolinho.infrastructure.config.TiendaJPAEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.domain.Pageable;
-
+import com.manolinho.infrastructure.persistence.entity.TiendaJPAEntity;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface SpringDataTiendaRepository extends JpaRepository<TiendaJPAEntity, Long> {
 

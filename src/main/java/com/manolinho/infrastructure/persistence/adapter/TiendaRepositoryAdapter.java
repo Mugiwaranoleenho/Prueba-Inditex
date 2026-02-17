@@ -1,13 +1,13 @@
-package com.manolinho.infrastructure.repository;
+package com.manolinho.infrastructure.persistence.adapter;
 
 import com.manolinho.domain.model.Tienda;
 import com.manolinho.domain.repository.TiendaRepository;
-import com.manolinho.infrastructure.config.TiendaJPAEntity;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Repository;
-
+import com.manolinho.infrastructure.persistence.entity.TiendaJPAEntity;
+import com.manolinho.infrastructure.persistence.repository.SpringDataTiendaRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class TiendaRepositoryAdapter implements TiendaRepository {
