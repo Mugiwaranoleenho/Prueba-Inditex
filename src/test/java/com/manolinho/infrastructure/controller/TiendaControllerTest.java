@@ -36,8 +36,6 @@ class TiendaControllerTest {
     @Test
     void deberiaCrearTiendaConPost() throws Exception {
         when(createTiendaUseCase.execute(
-                "Tienda Centro",
-                "Calle Mayor 123",
                 1L,
                 LocalDateTime.parse("2026-01-01T00:00:00"),
                 LocalDateTime.parse("2026-06-30T23:59:59"),
@@ -48,8 +46,6 @@ class TiendaControllerTest {
                 "EUR"
         )).thenReturn(new Tienda(
                 1L,
-                "Tienda Centro",
-                "Calle Mayor 123",
                 1L,
                 LocalDateTime.parse("2026-01-01T00:00:00"),
                 LocalDateTime.parse("2026-06-30T23:59:59"),
@@ -62,8 +58,6 @@ class TiendaControllerTest {
 
         String body = """
                 {
-                  "nombre": "Tienda Centro",
-                  "direccion": "Calle Mayor 123",
                   "brandId": 1,
                   "startDate": "2026-01-01T00:00:00",
                   "endDate": "2026-06-30T23:59:59",
@@ -80,14 +74,14 @@ class TiendaControllerTest {
                         .content(body))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.nombre").value("Tienda Centro"))
-                .andExpect(jsonPath("$.direccion").value("Calle Mayor 123"))
                 .andExpect(jsonPath("$.brandId").value(1))
                 .andExpect(jsonPath("$.priceList").value(1))
                 .andExpect(jsonPath("$.productId").value(35455))
                 .andExpect(jsonPath("$.priority").value(0))
                 .andExpect(jsonPath("$.price").value(35.50))
-                .andExpect(jsonPath("$.curr").value("EUR"));
+                .andExpect(jsonPath("$.curr").value("EUR"))
+                .andExpect(jsonPath("$.nombre").doesNotExist())
+                .andExpect(jsonPath("$.direccion").doesNotExist());
     }
 
     @Test
@@ -98,8 +92,6 @@ class TiendaControllerTest {
                 1L
         )).thenReturn(java.util.Optional.of(new Tienda(
                 5L,
-                "Tienda Centro",
-                "Calle Mayor 123",
                 1L,
                 LocalDateTime.parse("2026-01-01T00:00:00"),
                 LocalDateTime.parse("2026-06-30T23:59:59"),
@@ -122,17 +114,15 @@ class TiendaControllerTest {
                 .andExpect(jsonPath("$.endDate").value("2026-06-30T23:59:59"))
                 .andExpect(jsonPath("$.price").value(30.50))
                 .andExpect(jsonPath("$.id").doesNotExist())
-                .andExpect(jsonPath("$.nombre").doesNotExist())
-                .andExpect(jsonPath("$.direccion").doesNotExist())
                 .andExpect(jsonPath("$.priority").doesNotExist())
-                .andExpect(jsonPath("$.curr").doesNotExist());
+                .andExpect(jsonPath("$.curr").doesNotExist())
+                .andExpect(jsonPath("$.nombre").doesNotExist())
+                .andExpect(jsonPath("$.direccion").doesNotExist());
     }
 
     @Test
     void deberiaRetornarBadRequestCuandoValidacionFallaEnServicio() throws Exception {
         when(createTiendaUseCase.execute(
-                "Tienda Centro",
-                "Calle Mayor 123",
                 1L,
                 LocalDateTime.parse("2026-06-30T23:59:59"),
                 LocalDateTime.parse("2026-01-01T00:00:00"),
@@ -145,8 +135,6 @@ class TiendaControllerTest {
 
         String body = """
                 {
-                  "nombre": "Tienda Centro",
-                  "direccion": "Calle Mayor 123",
                   "brandId": 1,
                   "startDate": "2026-06-30T23:59:59",
                   "endDate": "2026-01-01T00:00:00",

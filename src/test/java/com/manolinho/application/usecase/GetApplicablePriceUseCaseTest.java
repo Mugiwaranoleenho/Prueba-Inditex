@@ -30,8 +30,6 @@ class GetApplicablePriceUseCaseTest {
         when(tiendaRepository.findApplicablePrice(fechaAplicacion, 35455L, 1L))
                 .thenReturn(Optional.of(new Tienda(
                         9L,
-                        "Tienda Centro",
-                        "Calle Mayor 123",
                         1L,
                         LocalDateTime.parse("2026-01-01T00:00:00"),
                         LocalDateTime.parse("2026-06-30T23:59:59"),

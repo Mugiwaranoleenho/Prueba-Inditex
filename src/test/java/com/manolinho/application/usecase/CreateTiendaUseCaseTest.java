@@ -32,8 +32,6 @@ class CreateTiendaUseCaseTest {
         when(tiendaRepository.save(any(Tienda.class)))
                 .thenReturn(new Tienda(
                         10L,
-                        "Tienda Norte",
-                        "Av. Principal 45",
                         1L,
                         LocalDateTime.parse("2026-01-01T00:00:00"),
                         LocalDateTime.parse("2026-12-31T23:59:59"),
@@ -45,8 +43,6 @@ class CreateTiendaUseCaseTest {
                 ));
 
         Tienda result = createTiendaUseCase.execute(
-                "Tienda Norte",
-                "Av. Principal 45",
                 1L,
                 LocalDateTime.parse("2026-01-01T00:00:00"),
                 LocalDateTime.parse("2026-12-31T23:59:59"),
@@ -61,23 +57,19 @@ class CreateTiendaUseCaseTest {
         verify(tiendaRepository).save(captor.capture());
         Tienda enviada = captor.getValue();
 
-        assertEquals("Tienda Norte", enviada.getNombre());
-        assertEquals("Av. Principal 45", enviada.getDireccion());
         assertEquals(2, enviada.getPriceList());
         assertEquals(12345L, enviada.getProductId());
         assertEquals(new BigDecimal("25.45"), enviada.getPrice());
         assertEquals(10L, result.getId());
-        assertEquals("Tienda Norte", result.getNombre());
+        assertEquals(1L, result.getBrandId());
     }
 
     @Test
-    void deberiaLanzarExcepcionCuandoNombreEsVacio() {
+    void deberiaLanzarExcepcionCuandoBrandIdEsNull() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
                 () -> createTiendaUseCase.execute(
-                        " ",
-                        "Av. Principal 45",
-                        1L,
+                        null,
                         LocalDateTime.parse("2026-01-01T00:00:00"),
                         LocalDateTime.parse("2026-12-31T23:59:59"),
                         2,
@@ -87,7 +79,7 @@ class CreateTiendaUseCaseTest {
                         "EUR"
                 )
         );
-        assertEquals("Nombre obligatorio", ex.getMessage());
+        assertEquals("BRAND_ID obligatorio", ex.getMessage());
     }
 
     @Test
@@ -95,8 +87,6 @@ class CreateTiendaUseCaseTest {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
                 () -> createTiendaUseCase.execute(
-                        "Tienda Norte",
-                        "Av. Principal 45",
                         1L,
                         LocalDateTime.parse("2026-12-31T23:59:59"),
                         LocalDateTime.parse("2026-01-01T00:00:00"),
