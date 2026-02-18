@@ -158,6 +158,7 @@ Actualmente hay pruebas de:
   - validación de ticket/compra
   - disponibilidad de talla destino
   - reembolso parcial/total
+  - OpenAPI/Swagger
 
 ### Fase 2 - Persistencia dual SQL + Mongo
 
@@ -170,7 +171,6 @@ Actualmente hay pruebas de:
 ### Fase 3 - Exposición y observabilidad
 
 - Endpoints para compra, devolución y cambio de talla
-- OpenAPI/Swagger
 - Registros estructurados y métricas
 - Trazabilidad de reglas aplicadas en cada operación
 
