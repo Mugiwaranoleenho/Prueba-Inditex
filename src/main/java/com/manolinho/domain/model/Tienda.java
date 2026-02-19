@@ -1,13 +1,19 @@
 package com.manolinho.domain.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tienda {
 
     private Long id;
@@ -20,23 +26,4 @@ public class Tienda {
     private BigDecimal price;
     private String curr;
 
-    public Tienda(Long id,
-                  Long brandId,
-                  LocalDateTime startDate,
-                  LocalDateTime endDate,
-                  Integer priceList,
-                  Long productId,
-                  Integer priority,
-                  BigDecimal price,
-                  String curr) {
-        this.id = id;
-        this.brandId = brandId;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.priceList = priceList;
-        this.productId = productId;
-        this.priority = priority;
-        this.price = price;
-        this.curr = curr;
-    }
 }

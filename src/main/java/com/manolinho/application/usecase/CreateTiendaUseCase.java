@@ -2,6 +2,7 @@ package com.manolinho.application.usecase;
 
 import com.manolinho.domain.model.Tienda;
 import com.manolinho.domain.repository.TiendaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CreateTiendaUseCase {
 
     private static final Set<String> ISO_4217_CODES = Currency.getAvailableCurrencies()
@@ -33,6 +35,7 @@ public class CreateTiendaUseCase {
                           Integer priority,
                           BigDecimal price,
                           String curr) {
+        log.info("Creando tarifa: brandId={}, productId={}, priceList={}", brandId, productId, priceList);
         validate(brandId, startDate, endDate, priceList, productId, priority, price, curr);
         String normalizedCurrency = curr.trim().toUpperCase(Locale.ROOT);
         Tienda tienda = new Tienda(
@@ -46,7 +49,9 @@ public class CreateTiendaUseCase {
                 price,
                 normalizedCurrency
         );
-        return tiendaRepository.save(tienda);
+        Tienda saved = tiendaRepository.save(tienda);
+        log.info("Tarifa creada con id={}", saved.getId());
+        return saved;
     }
 
     private void validate(Long brandId,

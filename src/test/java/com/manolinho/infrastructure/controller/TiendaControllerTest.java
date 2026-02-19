@@ -3,17 +3,20 @@ package com.manolinho.infrastructure.controller;
 import com.manolinho.application.usecase.CreateTiendaUseCase;
 import com.manolinho.application.usecase.GetApplicablePriceUseCase;
 import com.manolinho.domain.model.Tienda;
+import com.manolinho.infrastructure.security.RoleDiscountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,7 +36,11 @@ class TiendaControllerTest {
     @MockBean
     private GetApplicablePriceUseCase getApplicablePriceUseCase;
 
+    @MockBean
+    private RoleDiscountService roleDiscountService;
+
     @Test
+    @WithMockUser(roles = "EMPLEADO")
     void deberiaCrearTiendaConPost() throws Exception {
         when(createTiendaUseCase.execute(
                 1L,
@@ -85,6 +92,7 @@ class TiendaControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "CLIENTE")
     void deberiaConsultarPrecioAplicablePorFechaProductoYCadena() throws Exception {
         when(getApplicablePriceUseCase.execute(
                 LocalDateTime.parse("2026-01-15T10:00:00"),
@@ -101,6 +109,8 @@ class TiendaControllerTest {
                 new BigDecimal("30.50"),
                 "EUR"
         )));
+        when(roleDiscountService.resolveDiscountPercent(any())).thenReturn(BigDecimal.ZERO);
+        when(roleDiscountService.applyDiscount(new BigDecimal("30.50"), BigDecimal.ZERO)).thenReturn(new BigDecimal("30.50"));
 
         mockMvc.perform(get("/tiendas/precio")
                         .param("fechaAplicacion", "2026-01-15T10:00:00")
@@ -112,7 +122,9 @@ class TiendaControllerTest {
                 .andExpect(jsonPath("$.priceList").value(2))
                 .andExpect(jsonPath("$.startDate").value("2026-01-01T00:00:00"))
                 .andExpect(jsonPath("$.endDate").value("2026-06-30T23:59:59"))
-                .andExpect(jsonPath("$.price").value(30.50))
+                .andExpect(jsonPath("$.originalPrice").value(30.50))
+                .andExpect(jsonPath("$.discountPercent").value(0))
+                .andExpect(jsonPath("$.finalPrice").value(30.50))
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.priority").doesNotExist())
                 .andExpect(jsonPath("$.curr").doesNotExist())
@@ -121,6 +133,7 @@ class TiendaControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "EMPLEADO")
     void deberiaRetornarBadRequestCuandoValidacionFallaEnServicio() throws Exception {
         when(createTiendaUseCase.execute(
                 1L,

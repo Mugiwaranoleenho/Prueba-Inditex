@@ -8,6 +8,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,6 +63,7 @@ class TiendaPrecioEndpointIntegrationTest {
                                        String expectedEndDate,
                                        double expectedPrice) throws Exception {
         mockMvc.perform(get("/tiendas/precio")
+                        .with(httpBasic("cliente", "cliente123"))
                         .param("fechaAplicacion", fechaAplicacion)
                         .param("productId", "35455")
                         .param("brandId", "1"))
@@ -71,6 +73,8 @@ class TiendaPrecioEndpointIntegrationTest {
                 .andExpect(jsonPath("$.priceList").value(expectedPriceList))
                 .andExpect(jsonPath("$.startDate").value(expectedStartDate))
                 .andExpect(jsonPath("$.endDate").value(expectedEndDate))
-                .andExpect(jsonPath("$.price").value(expectedPrice));
+                .andExpect(jsonPath("$.originalPrice").value(expectedPrice))
+                .andExpect(jsonPath("$.discountPercent").value(0))
+                .andExpect(jsonPath("$.finalPrice").value(expectedPrice));
     }
 }
