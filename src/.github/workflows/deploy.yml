@@ -1,0 +1,11 @@
+#name: Build and Push of Prueba-Inditex API
+#
+#on:
+#  push:
+#    branches: [ main ]
+#
+#jobs:
+#  build-and-push:
+#
+
+# TODO finish this workflow to build and push the docker image to Docker Hub
