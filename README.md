@@ -215,7 +215,7 @@ Actualmente hay pruebas de:
 - Logging técnico en casos de uso, controladores y manejo de errores.
 - Diagrama de clases actualizado en Mermaid (`diagrama-clases-tienda.md`).
 
-## Plan de evolución (enfoque para recruiters)
+## Plan de evolución 
 
 ### Fase 1 - Dominio retail completo
 
