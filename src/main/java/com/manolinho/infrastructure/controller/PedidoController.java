@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.manolinho.infrastructure.util.AppConstants.Endpoint.PEDIDOS_BASE;
-import static com.manolinho.infrastructure.util.AppConstants.Message.LOG_POST_PEDIDOS;
-import static com.manolinho.infrastructure.util.AppConstants.Security.PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN;
+import static com.manolinho.infrastructure.util.AppConstants.Mensajes.LOG_POST_PEDIDOS;
+import static com.manolinho.infrastructure.util.AppConstants.Rutas.PEDIDOS_BASE;
+import static com.manolinho.infrastructure.util.AppConstants.Seguridad.PREAUTORIZACION_CLIENTE_EMPLEADO_JEFE_ADMIN;
 
 @RestController
 @RequestMapping(PEDIDOS_BASE)
@@ -29,12 +29,12 @@ public class PedidoController {
     }
 
     @PostMapping
-    @PreAuthorize(PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN)
-    public PedidoResponse create(@RequestBody CreatePedidoRequest request) {
-        log.info(LOG_POST_PEDIDOS, request.fechaCompra(), request.lineas() == null ? 0 : request.lineas().size());
+    @PreAuthorize(PREAUTORIZACION_CLIENTE_EMPLEADO_JEFE_ADMIN)
+    public PedidoResponse crear(@RequestBody CreatePedidoRequest solicitud) {
+        log.info(LOG_POST_PEDIDOS, solicitud.fechaCompra(), solicitud.lineas() == null ? 0 : solicitud.lineas().size());
         Pedido pedido = createPedidoUseCase.execute(
-                request.fechaCompra(),
-                request.lineas() == null ? null : request.lineas().stream()
+                solicitud.fechaCompra(),
+                solicitud.lineas() == null ? null : solicitud.lineas().stream()
                 .map(linea -> new CreatePedidoLineaInput(
                         linea.productId(),
                         linea.talla(),
