@@ -19,8 +19,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import static com.manolinho.infrastructure.util.AppConstants.Endpoint.PRECIO_RELATIVE;
+import static com.manolinho.infrastructure.util.AppConstants.Endpoint.TIENDAS_BASE;
+import static com.manolinho.infrastructure.util.AppConstants.Message.LOG_GET_TIENDAS_PRECIO;
+import static com.manolinho.infrastructure.util.AppConstants.Message.LOG_POST_TIENDAS;
+import static com.manolinho.infrastructure.util.AppConstants.Message.NO_HAY_TARIFA_APLICABLE;
+import static com.manolinho.infrastructure.util.AppConstants.RequestParam.BRAND_ID;
+import static com.manolinho.infrastructure.util.AppConstants.RequestParam.FECHA_APLICACION;
+import static com.manolinho.infrastructure.util.AppConstants.RequestParam.PRODUCT_ID;
+import static com.manolinho.infrastructure.util.AppConstants.Security.PREAUTH_EMPLEADO_JEFE_ADMIN;
+
 @RestController
-@RequestMapping("/tiendas")
+@RequestMapping(TIENDAS_BASE)
 @Slf4j
 public class TiendaController {
 
@@ -37,9 +47,9 @@ public class TiendaController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('EMPLEADO','EMPLEADO_JEFE','ADMIN')")
+    @PreAuthorize(PREAUTH_EMPLEADO_JEFE_ADMIN)
     public Tienda create(@RequestBody CreateTiendaRequest request) {
-        log.info("POST /tiendas brandId={}, productId={}", request.brandId(), request.productId());
+        log.info(LOG_POST_TIENDAS, request.brandId(), request.productId());
         return createTiendaUseCase.execute(
                 request.brandId(),
                 request.startDate(),
@@ -52,15 +62,15 @@ public class TiendaController {
         );
     }
 
-    @GetMapping("/precio")
+    @GetMapping(PRECIO_RELATIVE)
     public ApplicablePriceResponse getApplicablePrice(
-            @RequestParam("fechaAplicacion")
+            @RequestParam(FECHA_APLICACION)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaAplicacion,
-            @RequestParam("productId") Long productId,
-            @RequestParam("brandId") Long brandId,
+            @RequestParam(PRODUCT_ID) Long productId,
+            @RequestParam(BRAND_ID) Long brandId,
             Authentication authentication
     ) {
-        log.info("GET /tiendas/precio fechaAplicacion={}, productId={}, brandId={}", fechaAplicacion, productId, brandId);
+        log.info(LOG_GET_TIENDAS_PRECIO, fechaAplicacion, productId, brandId);
         return getApplicablePriceUseCase
                 .execute(fechaAplicacion, productId, brandId)
                 .map(tienda -> {
@@ -77,7 +87,7 @@ public class TiendaController {
                             finalPrice
                     );
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay tarifa aplicable"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, NO_HAY_TARIFA_APLICABLE));
     }
 
     public record CreateTiendaRequest(

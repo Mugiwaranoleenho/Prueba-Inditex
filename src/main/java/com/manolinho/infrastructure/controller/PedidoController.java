@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.manolinho.infrastructure.util.AppConstants.Endpoint.PEDIDOS_BASE;
+import static com.manolinho.infrastructure.util.AppConstants.Message.LOG_POST_PEDIDOS;
+import static com.manolinho.infrastructure.util.AppConstants.Security.PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN;
+
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping(PEDIDOS_BASE)
 @Slf4j
 public class PedidoController {
 
@@ -25,9 +29,9 @@ public class PedidoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('CLIENTE','EMPLEADO','EMPLEADO_JEFE','ADMIN')")
+    @PreAuthorize(PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN)
     public PedidoResponse create(@RequestBody CreatePedidoRequest request) {
-        log.info("POST /pedidos fechaCompra={}, lineas={}", request.fechaCompra(), request.lineas() == null ? 0 : request.lineas().size());
+        log.info(LOG_POST_PEDIDOS, request.fechaCompra(), request.lineas() == null ? 0 : request.lineas().size());
         Pedido pedido = createPedidoUseCase.execute(
                 request.fechaCompra(),
                 request.lineas() == null ? null : request.lineas().stream()

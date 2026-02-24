@@ -5,6 +5,9 @@ import java.math.RoundingMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import static com.manolinho.infrastructure.util.AppConstants.Security.AUTH_ROLE_EMPLEADO;
+import static com.manolinho.infrastructure.util.AppConstants.Security.AUTH_ROLE_EMPLEADO_JEFE;
+
 @Component
 public class RoleDiscountService {
 
@@ -16,12 +19,12 @@ public class RoleDiscountService {
             return BigDecimal.ZERO;
         }
         boolean isEmpleadoJefe = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_EMPLEADO_JEFE".equals(a.getAuthority()));
+                .anyMatch(a -> AUTH_ROLE_EMPLEADO_JEFE.equals(a.getAuthority()));
         if (isEmpleadoJefe) {
             return EMPLEADO_JEFE_DISCOUNT;
         }
         boolean isEmpleado = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_EMPLEADO".equals(a.getAuthority()));
+                .anyMatch(a -> AUTH_ROLE_EMPLEADO.equals(a.getAuthority()));
         if (isEmpleado) {
             return EMPLEADO_DISCOUNT;
         }

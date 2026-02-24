@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.manolinho.infrastructure.util.AppConstants.Endpoint.DEVOLUCIONES_BASE;
+import static com.manolinho.infrastructure.util.AppConstants.Message.LOG_POST_DEVOLUCIONES;
+import static com.manolinho.infrastructure.util.AppConstants.Security.PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN;
+
 @RestController
-@RequestMapping("/devoluciones")
+@RequestMapping(DEVOLUCIONES_BASE)
 @Slf4j
 public class DevolucionController {
 
@@ -25,9 +29,9 @@ public class DevolucionController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('CLIENTE','EMPLEADO','EMPLEADO_JEFE','ADMIN')")
+    @PreAuthorize(PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN)
     public DevolucionResponse create(@RequestBody CreateDevolucionRequest request) {
-        log.info("POST /devoluciones pedidoId={}, lineas={}", request.pedidoId(), request.lineas() == null ? 0 : request.lineas().size());
+        log.info(LOG_POST_DEVOLUCIONES, request.pedidoId(), request.lineas() == null ? 0 : request.lineas().size());
         Devolucion devolucion = createDevolucionUseCase.execute(
                 request.pedidoId(),
                 request.fechaSolicitud(),

@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.manolinho.infrastructure.util.AppConstants.Endpoint.CAMBIOS_TALLA_BASE;
+import static com.manolinho.infrastructure.util.AppConstants.Message.LOG_POST_CAMBIOS_TALLA;
+import static com.manolinho.infrastructure.util.AppConstants.Security.PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN;
+
 @RestController
-@RequestMapping("/cambios-talla")
+@RequestMapping(CAMBIOS_TALLA_BASE)
 @Slf4j
 public class CambioTallaController {
 
@@ -22,9 +26,9 @@ public class CambioTallaController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('CLIENTE','EMPLEADO','EMPLEADO_JEFE','ADMIN')")
+    @PreAuthorize(PREAUTH_CLIENTE_EMPLEADO_JEFE_ADMIN)
     public CambioTallaResponse create(@RequestBody CreateCambioTallaRequest request) {
-        log.info("POST /cambios-talla pedidoId={}, productId={}", request.pedidoId(), request.productId());
+        log.info(LOG_POST_CAMBIOS_TALLA, request.pedidoId(), request.productId());
         CambioTalla cambio = createCambioTallaUseCase.execute(
                 request.pedidoId(),
                 request.productId(),
