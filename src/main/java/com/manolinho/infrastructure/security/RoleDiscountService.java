@@ -5,31 +5,34 @@ import java.math.RoundingMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import static com.manolinho.infrastructure.util.AppConstants.Seguridad.AUTORIDAD_ROL_EMPLEADO;
+import static com.manolinho.infrastructure.util.AppConstants.Seguridad.AUTORIDAD_ROL_EMPLEADO_JEFE;
+
 @Component
 public class RoleDiscountService {
 
     private static final BigDecimal EMPLEADO_DISCOUNT = new BigDecimal("0.05");
     private static final BigDecimal EMPLEADO_JEFE_DISCOUNT = new BigDecimal("0.15");
 
-    public BigDecimal resolveDiscountPercent(Authentication authentication) {
-        if (authentication == null || authentication.getAuthorities() == null) {
+    public BigDecimal resolverPorcentajeDescuento(Authentication autenticacion) {
+        if (autenticacion == null || autenticacion.getAuthorities() == null) {
             return BigDecimal.ZERO;
         }
-        boolean isEmpleadoJefe = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_EMPLEADO_JEFE".equals(a.getAuthority()));
-        if (isEmpleadoJefe) {
+        boolean esEmpleadoJefe = autenticacion.getAuthorities().stream()
+                .anyMatch(autoridad -> AUTORIDAD_ROL_EMPLEADO_JEFE.equals(autoridad.getAuthority()));
+        if (esEmpleadoJefe) {
             return EMPLEADO_JEFE_DISCOUNT;
         }
-        boolean isEmpleado = authentication.getAuthorities().stream()
-                .anyMatch(a -> "ROLE_EMPLEADO".equals(a.getAuthority()));
-        if (isEmpleado) {
+        boolean esEmpleado = autenticacion.getAuthorities().stream()
+                .anyMatch(autoridad -> AUTORIDAD_ROL_EMPLEADO.equals(autoridad.getAuthority()));
+        if (esEmpleado) {
             return EMPLEADO_DISCOUNT;
         }
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal applyDiscount(BigDecimal originalPrice, BigDecimal discountPercent) {
-        BigDecimal factor = BigDecimal.ONE.subtract(discountPercent);
-        return originalPrice.multiply(factor).setScale(2, RoundingMode.HALF_UP);
+    public BigDecimal aplicarDescuento(BigDecimal precioOriginal, BigDecimal porcentajeDescuento) {
+        BigDecimal factor = BigDecimal.ONE.subtract(porcentajeDescuento);
+        return precioOriginal.multiply(factor).setScale(2, RoundingMode.HALF_UP);
     }
 }

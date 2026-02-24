@@ -34,3 +34,6 @@ build/
 
 ### Local assistant logs ###
 .local/
+
+### Postman local collections ###
+postman/arquitectura.hexagonal-debug.postman_collection.json

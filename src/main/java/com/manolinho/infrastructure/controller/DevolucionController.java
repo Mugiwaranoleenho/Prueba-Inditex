@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.manolinho.infrastructure.util.AppConstants.Mensajes.LOG_POST_DEVOLUCIONES;
+import static com.manolinho.infrastructure.util.AppConstants.Rutas.DEVOLUCIONES_BASE;
+import static com.manolinho.infrastructure.util.AppConstants.Seguridad.PREAUTORIZACION_CLIENTE_EMPLEADO_JEFE_ADMIN;
+
 @RestController
-@RequestMapping("/devoluciones")
+@RequestMapping(DEVOLUCIONES_BASE)
 @Slf4j
 public class DevolucionController {
 
@@ -25,13 +29,13 @@ public class DevolucionController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('CLIENTE','EMPLEADO','EMPLEADO_JEFE','ADMIN')")
-    public DevolucionResponse create(@RequestBody CreateDevolucionRequest request) {
-        log.info("POST /devoluciones pedidoId={}, lineas={}", request.pedidoId(), request.lineas() == null ? 0 : request.lineas().size());
+    @PreAuthorize(PREAUTORIZACION_CLIENTE_EMPLEADO_JEFE_ADMIN)
+    public DevolucionResponse crear(@RequestBody CreateDevolucionRequest solicitud) {
+        log.info(LOG_POST_DEVOLUCIONES, solicitud.pedidoId(), solicitud.lineas() == null ? 0 : solicitud.lineas().size());
         Devolucion devolucion = createDevolucionUseCase.execute(
-                request.pedidoId(),
-                request.fechaSolicitud(),
-                request.lineas() == null ? null : request.lineas().stream()
+                solicitud.pedidoId(),
+                solicitud.fechaSolicitud(),
+                solicitud.lineas() == null ? null : solicitud.lineas().stream()
                 .map(linea -> new LineaDevolucionInput(linea.productId(), linea.talla(), linea.unidades()))
                 .toList()
         );
